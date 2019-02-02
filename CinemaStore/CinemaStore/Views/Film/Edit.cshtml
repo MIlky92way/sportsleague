@@ -1,0 +1,132 @@
+﻿@model CinemaStore.Models.Film.FilmEditViewModel
+@{
+    ViewBag.Title = "Редактирование инфо о фильме.";
+}
+
+<h2>@ViewBag.Title</h2>
+@if (ViewBag.Allowed != null && !ViewBag.Allowed)
+{
+    <div class="alert alert-danger" role="alert">
+        Редактирование недопустимо! Ошибка доступа!
+        <a href="/profile">В профиль</a>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-md-10 col-xs-12">
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frm", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary()
+                    <Div class="row">
+                        <div class="col-lg-6 col-md-6 col-xs-12">
+                            <div><strong>Основное</strong></div>
+                            <div class="form-group">
+                                <label>Название</label>
+                                @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>Год</label>
+                                @Html.TextBoxFor(x => x.Year, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>Категории</label>
+                                @Html.ListBoxFor(x => x.CategoryIds, (MultiSelectList)ViewBag.SelectCategories, new { @class = "form-control", multiple = "multiple" })
+                            </div>
+                            <div class="form-group">
+                                <label>Постер</label>
+                                <div class="custom-file">
+                                    @Html.TextBoxFor(x => x.Files, new { type = "file", @class = "custom-file-input", id = "customFile", name = "Files" })
+                                    <label class="custom-file-label" for="customFile">Выберите файл</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-xs-12">
+                            <div><strong>Дополнительно</strong></div>
+                            <div class="form-group">
+                                <label>Режиссер</label>
+                                @Html.ListBoxFor(x => x.ProducerIds, (MultiSelectList)ViewBag.SelectProducer, new { @class = "form-control", multiple = "multiple" })
+                            </div>
+                            <div class="form-group">
+                                <label>Актеры</label>
+                                @Html.ListBoxFor(x => x.ActorIds, (MultiSelectList)ViewBag.SelectActors, new { @class = "form-control", multiple = "multiple" })
+                            </div>
+                            <div class="form-group">
+                                <label>Описание фильма</label>
+                                @Html.TextAreaFor(x => x.Description, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </Div>
+                    <button class="btn btn-secondary">Редактировать</button>
+                }
+            </div>
+        </div>
+    </div>
+    @section scripts{
+        <script>
+            $(function () {
+                var validate = $("#frm").validate();
+                addFieldRule("#Name", {
+                    required: true,
+                    messages: {
+                        required: "*",
+                    }
+                });
+                addFieldRule("#Year", {
+                    required: true,
+                    digits: true,
+                    messages: {
+                        required: "*",
+                        digits: "толко числа!"
+                    }
+                });
+                addFieldRule("#CategoryIds", {
+                    required: true,
+
+                    messages: {
+                        required: "*",
+
+                    }
+                });
+                addFieldRule("#ProducerIds", {
+                    required: true,
+
+                    messages: {
+                        required: "*",
+
+                    }
+                });
+                addFieldRule("#ActorIds", {
+                    required: true,
+
+                    messages: {
+                        required: "*",
+
+                    }
+                });
+                addFieldRule("#Files", {
+                    required: true,
+
+                    messages: {
+                        required: "*",
+
+                    }
+                });
+                addFieldRule("#Description", {
+                    required: true,
+
+                    messages: {
+                        required: "*",
+
+                    }
+                });
+            });
+        </script>
+    }
+}
+
+
+
+

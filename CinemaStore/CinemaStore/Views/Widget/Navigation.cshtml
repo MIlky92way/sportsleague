@@ -1,0 +1,51 @@
+﻿@using CinemaStore.Entities.Category
+@model CinemaStore.Models.Navigation.NavigationModel
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Sinema store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navmenu" aria-controls="navmenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav mr-auto">
+            @foreach (var item in Model.Categories ?? new List<CategoryEntity>())
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="/film/index/@item.Id">@item.Name</a>
+                </li>
+            }
+        </ul>
+        <div class="mt-2 mt-md-0">
+            <ul class="navbar-nav mr-auto">
+                @if (Model.AuthUser)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">
+                            @Model.UserName
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        @using (Html.BeginForm("Logout", "Account", FormMethod.Post))
+                        {
+                            <button type="submit" class="btn btn-outline-secondary">Выйти</button>
+                        }
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account/login">
+                            Вход
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account/register">
+                            Регистрация
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,78 @@
+﻿@model CinemaStore.Blogic.Film.Model.FilmModel
+@{
+    if (Model != null)
+    {
+        ViewBag.Title = Model.Name;
+    }
+    else
+    {
+        ViewBag.Title = "Не найдено!";
+    }
+
+}
+
+@if (Model == null)
+{
+    <div class="alert alert-warning" role="alert">
+        Фильм не найден!
+        <a href="/film">Каталог</a>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-md-5 col-xs-5">
+                <img src="~/uploads/poster/@Model.PosterMax" alt="@Model.Name" class="card-img" />
+            </div>
+            <div class="col-lg-7 col-md-7 col-xs-5">
+                <h3>@Model.Name</h3>
+                <ul>
+                    <li>
+                        <h5>Год выпуска</h5>
+                        <div>
+                            @Model.Year
+                        </div>
+                    </li>
+                    <li>
+                        <h5>Актеры</h5>
+                        @foreach (var item in Model.Actors)
+                        {
+                            <div>
+                                @item.GivenName @item.FamilyName
+                            </div>
+                        }
+                    </li>
+                    <li>
+                        <h5>Режисерры</h5>
+                        @foreach (var item in Model.Producer)
+                        {
+                            <div>
+                                @item.GivenName @item.FamilyName
+                            </div>
+                        }
+                    </li>
+                    <li>
+                        <h5>Жанры</h5>
+                        @foreach (var item in Model.Categories)
+                        {
+                            <div>
+                                <a href="/film/index/@item.Id">@item.Name</a>
+                            </div>
+                        }
+                    </li>
+                    <li>
+                        <h6>Загружено</h6>
+                        <div>@Model.User.UserName &ndash; @Model.DateCreate.ToShortDateString()</div>
+                    </li>
+                </ul>
+                <article>
+                    @Model.Description
+                </article>
+            </div>
+        </div>
+
+    </div>
+}
+
+

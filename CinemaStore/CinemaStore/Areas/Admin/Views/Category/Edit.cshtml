@@ -1,0 +1,41 @@
+﻿@model CinemaStore.Entities.Category.CategoryEntity
+@{
+    ViewBag.Title = $"Редактор: Категории";
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            @using (Html.BeginForm("Edit", "Category", FormMethod.Post, new { id = "formCategory" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label>Наименование</label>
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Описание</label>
+                    @Html.TextBoxFor(x => x.Description, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary">Редактировать</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+    $(function () {
+        var validate = $("#formCategory").validate();
+        addFieldRule("#Name", {
+            required: true,
+            messages: {
+                required: "*",
+            }
+        });
+    });
+    </script>
+}

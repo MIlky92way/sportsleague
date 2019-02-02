@@ -1,0 +1,80 @@
+﻿@using CinemaStore.Helpers;
+@using CinemaStore.Entities.Country
+@model CinemaStore.Areas.Admin.Models.CountryModel
+@{
+    ViewBag.Title = "Страны";
+    Model.ClassName = "btn btn-secondary";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-7 col-xs-12">
+
+            <table class="table">
+                <thead class="thead-dark tbl-header">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Наименование</th>
+                        <th scope="col">Опиание</th>
+                        <th scope="col">Дата создания записи</th>
+                        <th scope="col">
+                            @using (Html.BeginForm("Index", "Country", FormMethod.Get, new { id = "frm" }))
+                            {
+                                @Html.HiddenFor(x => x.Page)
+                                @Html.DropDownListFor(x => x.CountOnPage, Model.SelectCountIitemsOnPage, "Кол-во на странице", new { @class = "" })
+                            }
+
+                        </th>
+                        <th scope="col">
+                            <a href="/admin/country/edit" class="btn btn-light">Добавить</a>
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Countries ?? new List<CountryEntity>())
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td>@item.DateCreate</td>
+                            <td>
+                                <a href="/admin/country/edit/@item.Id" class="btn btn-primary">Редактировать</a>
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("Delete", "Country", FormMethod.Post))
+                                {                                    
+                                    <input type="hidden" name="id" value="@item.Id"/>
+                                    <button type="submit" class="btn btn-danger">Удалить</button>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.TotalItems > 0)
+            {
+                <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        @Html.Pagination(Model, x => Url.Action("Index", new { Page = x, CountOnPage = Model.CountOnPage }))
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+    @section scripts{
+        <script>
+            $(function () {
+                $("#CountOnPage").change(function () {
+
+                    $("#frm").submit();
+
+                });
+            })
+        </script>
+    }

@@ -1,0 +1,59 @@
+﻿
+@model CinemaStore.Areas.Admin.Models.FilmCrewEditModel
+@{
+    ViewBag.Title = "Редактор: Съемочная группа";
+}
+
+<h3>@ViewBag.Title</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            @using (Html.BeginForm("Edit", "FilmCrew", FormMethod.Post, new { id = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x=>x.Id)
+                <div class="form-group">
+                    <label>Имя</label>
+                    @Html.TextBoxFor(x => x.GivenName, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Фамилия</label>
+                    @Html.TextBoxFor(x => x.FamilyName, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Отчество</label>
+                    @Html.TextBoxFor(x => x.Patronymic, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Группа</label>  
+                    @Html.DropDownListFor(x=>x.Group,Model.SelectFilmCrewGroup,new { @class="form-control"})
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary">Редактировать</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            var validate = $("#form").validate();
+
+            addFieldRule("#GivenName", {
+                required: true,
+                messages: {
+                    required: "*",
+                }
+            });
+            addFieldRule("#FamilyName", {
+                required: true,
+                messages: {
+                    required: "*",
+                }
+            });
+        });
+    </script>
+}

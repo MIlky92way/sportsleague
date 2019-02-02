@@ -1,0 +1,37 @@
+﻿@using CinemaStore.Helpers;
+@using CinemaStore.Blogic.Film.Model;
+@model CinemaStore.Models.Film.FilmViewModel
+@{
+    ViewBag.Title = string.IsNullOrEmpty(Model.CategoryName) ? "Фильмы" : Model.CategoryName;
+    Model.ClassName = "btn btn-secondary";
+}
+
+<h2>@Model.CategoryName</h2>
+
+<div class="container">
+    <hr />
+    <div class="row">
+
+        @foreach (var item in Model.Films ?? new List<FilmModel>())
+        {
+            <div class="col-lg-3 col-md-2 col-xs-12">
+                <div class="card">
+                    <a href="/film/details/@item.Id">
+                        <img class="card-img-top" src="/uploads/poster/@item.PosterMin" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>                       
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+    <hr />
+    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            @Html.Pagination(Model, x => Url.Action("Index", new { Page = x, CountOnPage = Model.CountOnPage }))
+        </div>
+    </div>
+</div>
+
+
