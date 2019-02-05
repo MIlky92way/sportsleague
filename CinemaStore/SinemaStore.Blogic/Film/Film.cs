@@ -104,20 +104,23 @@ namespace CinemaStore.Blogic.Film
             List<FilmModel> result = new List<FilmModel>();
             using (context = new CinemaStoreContext())
             {
-                var films = context.FilmEntity
-                    .Include(x => x.Posters)
-                    .Include(x => x.Categories)
-                    .Include(x => x.FilmCrew);
+                model.TotalItems = context.FilmEntity.Count();
 
-                model.TotalItems = films.Count();
+                var films = context.FilmEntity
+                    .Include(x => x.Categories);
+
                 if (categoryId > 0)
                 {
-                    films = films.Where(f => f.Categories.Any(c => c.Id == categoryId));
+                    films = films
+                        .Where(f => f.Categories.Any(c => c.Id == categoryId));
                 }
 
-
-                var tempfilms = films.OrderBy(x => x.DateCreate)
-                      .Skip((model.Page - 1) * model.CountOnPage).Take(model.CountOnPage)
+                var tempfilms = films
+                    .OrderBy(x => x.DateCreate)
+                    .Skip((model.Page - 1) * model.CountOnPage)
+                    .Take(model.CountOnPage)
+                    .Include(x => x.Posters)
+                    .Include(x => x.FilmCrew)
                     .ToList();
 
                 result = MapTo(tempfilms);
