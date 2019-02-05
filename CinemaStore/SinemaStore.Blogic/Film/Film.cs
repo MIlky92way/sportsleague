@@ -76,14 +76,13 @@ namespace CinemaStore.Blogic.Film
 
             using (context = new CinemaStoreContext())
             {
+                model.TotalItems = context.FilmEntity.Count();
                 var films = context.FilmEntity
                     .Include(x => x.Posters)
                     .Include(x => x.Categories)
                     .Include(x => x.FilmCrew)
                     .AsNoTracking();
-
-                model.TotalItems = films.Count();
-
+                
                 if (predicate != null)
                 {
                     films = films.Where(predicate).AsQueryable();
@@ -104,7 +103,7 @@ namespace CinemaStore.Blogic.Film
             List<FilmModel> result = new List<FilmModel>();
             using (context = new CinemaStoreContext())
             {
-                model.TotalItems = context.FilmEntity.Count();
+                //model.TotalItems = context.FilmEntity.Count();
 
                 var films = context.FilmEntity
                     .Include(x => x.Categories);
@@ -113,6 +112,12 @@ namespace CinemaStore.Blogic.Film
                 {
                     films = films
                         .Where(f => f.Categories.Any(c => c.Id == categoryId));
+
+                    model.TotalItems = films.Count();
+                }
+                else
+                {
+                    return result;
                 }
 
                 var tempfilms = films
